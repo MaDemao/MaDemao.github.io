@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.mademao.com">
-  <title>马德茂的博客</title>
+  <title>Archives: 2018/8 | 马德茂的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Be better, Be stronger">
 <meta property="og:type" content="website">
 <meta property="og:title" content="马德茂的博客">
-<meta property="og:url" content="http://www.mademao.com/index.html">
+<meta property="og:url" content="http://www.mademao.com/archives/2018/08/index.html">
 <meta property="og:site_name" content="马德茂的博客">
 <meta property="og:description" content="Be better, Be stronger">
 <meta property="og:locale" content="zh-CN">
@@ -151,106 +151,47 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-GIF文件学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/08/02/GIF文件学习/" class="archive-article-date">
+  	<time datetime="2018-08-02T11:34:01.579Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-02</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/02/GIF文件学习/">GIF文件学习（一）：GIF文件结构学习</a>
+      <a class="archive-article-title" href="/2018/08/02/GIF文件学习/">GIF文件学习（一）：GIF文件结构学习</a>
     </h1>
   
 
-        
-        <a href="/2018/08/02/GIF文件学习/" class="archive-article-date">
-  	<time datetime="2018-08-02T11:34:01.579Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：<a href="https://blog.csdn.net/wzy198852/article/details/17266507" target="_blank" rel="noopener">gif 格式图片详细解析</a></p>
-<p>#一.概述</p>
-<p>GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。</p>
-<p>#二.GIF文件结构</p>
-<p>##基础知识</p>
-<p>GIF文件内部是按块来进行划分的，其中包括<strong>控制块（Control Block）</strong>和<strong>数据块（Data Sub-blcoks）</strong>两种。</p>
-<ul>
-<li><p>控制块是用来控制数据块行为的，不同的控制块一般包含不同的控制参数。</p>
-</li>
-<li><p>数据块是用来记载数据的，数据块是一组8-bit组成的数据流，其中每个数据块的大小最大为<strong>256字节</strong>，其中第一个字节用于指出该数据块所含字节数，即一个数据块记录数据所用字节最多为<strong>255字节</strong>。以下是数据块的结构：</p>
-<table><br>  <tr><br>      <th>BYTE</th><br>      <th>7</th><br>      <th>6</th><br>      <th>5</th><br>      <th>4</th><br>      <th>3</th><br>      <th>2</th><br>      <th>1</th><br>      <th>0</th><br>      <th>BIT</th><br>  </tr><br>  <tr><br>      <th>0</th><br>      <th colspan="8" bgcolor="green">块大小</th><br>      <th>Blcok Size - 块大小，不包含这个字节</th><br>  </tr><br>  <tr><br>      <th>1</th><br>      <th colspan="8" bgcolor="green"></th><br>      <th rowspan="5">Data Values - 块数据，8-bit的字符串</th><br>  </tr><br>  <tr><br>      <th>2</th><br>      <th colspan="8" bgcolor="green"></th><br>  </tr><br>  <tr><br>      <th>…</th><br>      <th colspan="8" bgcolor="green"></th><br>  </tr><br>  <tr><br>      <th>254</th><br>      <th colspan="8" bgcolor="green"></th><br>  </tr><br>  <tr><br>      <th>255</th><br>      <th colspan="8" bgcolor="green"></th><br>  </tr><br></table>
+        <div class="article-info info-on-right">
+          
+          
 
-
-</li>
-</ul>
-<p>##GIF结构</p>
-<p>GIF文件的结构为：<strong>文件头（File Header）</strong>、<strong>GIF数据流（GIF Data Stream）</strong>和<strong>文件终结器（Trailer）</strong>三部分。</p>
-<p>接下来详细讲解每部分的构成。</p>
-<p>#三.GIF各部分组成</p>
-<p>##1.文件头</p>
-<p>文件头包含<strong>文件署名（Signature）</strong>和<strong>版本号（Version）</strong>两部分。</p>
-<p>###(1)文件署名</p>
-<p>文件署名表示该文件是GIF文件，这部分由”GIF”三个字符组成：</p>
-<table><br>    <tr><br>        <th>BYTE</th><br>        <th>7</th><br>        <th>6</th><br>        <th>5</th><br>        <th>4</th><br>        <th>3</th><br>        <th>2</th><br>        <th>1</th><br>        <th>0</th><br>        <th>BIT</th><br>    </tr><br>    <tr><br>        <th>0</th><br>        <th colspan="8" bgcolor="green">‘G’(47)</th><br>        <th rowspan="3">文件署名</th><br>    </tr><br>    <tr><br>        <th>1</th><br>        <th colspan="8" bgcolor="green">‘I’(49)</th><br>    </tr><br>    <tr><br>        <th>2</th><br>        <th colspan="8" bgcolor="green">“F”(46)</th><br>    </tr><br></table>
-
-<p>###(2)版本号</p>
-<p>版本号表示GIF版本号，有”87a”和”89a”两种：</p>
-<table><br>    <tr><br>        <th>BYTE</th><br>        <th>7</th><br>        <th>6</th><br>        <th>5</th><br>        <th>4</th><br>        <th>3</th><br>        <th>2</th><br>        <th>1</th><br>        <th>0</th><br>        <th>BIT</th><br>    </tr><br>    <tr><br>        <th>0</th><br>        <th colspan="8" bgcolor="green">‘8’(38)</th><br>        <th rowspan="3">版本号</th><br>    </tr><br>    <tr><br>        <th>1</th><br>        <th colspan="8" bgcolor="green">‘7’(39)或’9’(40)</th><br>    </tr><br>    <tr><br>        <th>2</th><br>        <th colspan="8" bgcolor="green">“a”(61)</th><br>    </tr><br></table>
-
-
-<p>##2.GIF数据流</p>
-<p>GIF数据流包含<strong>逻辑屏幕标识符（Logical Screen Descriptor）</strong>、<strong>全局颜色列表（Global Color Table）</strong>和<strong>图像块（Image Block）</strong>三个基本部分以及一些扩展部分组成，扩展部分包括：<strong>图形控制扩展（Graphic Control Extension）</strong>、<strong>注释扩展（Comment Extension）</strong>、<strong>图形文本扩展（Plain Text Extension）</strong>以及<strong>应用程序扩展（Application Extension）</strong>四部分。</p>
-<p>###(1)逻辑屏幕标识符</p>
-<p>该部分由<strong>7个字节</strong>组成，结构为：</p>
-<table><br>    <tr><br>        <th>BYTE</th><br>        <th>7</th><br>        <th>6</th><br>        <th>5</th><br>        <th>4</th><br>        <th>3</th><br>        <th>2</th><br>        <th>1</th><br>        <th>0</th><br>        <th>BIT</th><br>    </tr><br>    <tr><br>        <th>0</th><br>        <th colspan="8" rowspan="2" bgcolor="green">逻辑屏幕宽度</th><br>        <th rowspan="2">像素数，定义GIF图像宽度</th><br>    </tr><br>    <tr><br>        <th>1</th><br>    </tr><br>    <tr><br>        <th>2</th><br>        <th colspan="8" rowspan="2" bgcolor="green">逻辑屏幕高度</th><br>        <th rowspan="2">像素数，定义GIF图像高度</th><br>    </tr><br>    <tr><br>        <th>3</th><br>    </tr><br>    <tr><br>        <th>4</th><br>        <th bgcolor="green">m</th><br>        <th colspan="3" bgcolor="green">cr</th><br>        <th bgcolor="green">s</th><br>        <th colspan="3" bgcolor="green">pixel</th><br>        <th>具体描述见下</th><br>    </tr><br>    <tr><br>        <th>5</th><br>        <th colspan="8" bgcolor="green">背景色</th><br>        <th>背景颜色（在全局颜色列表中的索引，如果没有全局颜色列表，则该值没有意义）</th><br>    </tr><br>    <tr><br>        <th>6</th><br>        <th colspan="8" bgcolor="green">像素宽高比</th><br>        <th>像素宽高比</th><br>    </tr><br></table>
-
-<p>m：全局颜色列表标志，当置位时表示有全局颜色列表，pixel值有意义<br>cr：颜色深度，cr+1确定图像的颜色深度<br>s：分类标志，如果置位表示全局颜色列表分类排序<br>pixel：全局颜色列表大小，pixel+1确定颜色列表的索引数（2的pixel+1次方）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/02/GIF文件学习/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
+    </div></section>
+  
+
+    
 
 
           </div>
@@ -272,9 +213,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
