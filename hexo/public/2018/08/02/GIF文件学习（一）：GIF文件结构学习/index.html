@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.mademao.com">
-  <title>Archives: 2018/8 | 马德茂的博客</title>
+  <title>GIF文件学习（一）：GIF文件结构学习 | 马德茂的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Be better, Be stronger">
-<meta property="og:type" content="website">
-<meta property="og:title" content="马德茂的博客">
-<meta property="og:url" content="http://www.mademao.com/archives/2018/08/index.html">
+  <meta name="description" content="本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：gif 格式图片详细解析 一.概述GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。 二.GIF文件结构基础知识GIF文件内部是按块来进行划分的，其中包括控制块（Control Block）和数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIF文件学习（一）：GIF文件结构学习">
+<meta property="og:url" content="http://www.mademao.com/2018/08/02/GIF文件学习（一）：GIF文件结构学习/index.html">
 <meta property="og:site_name" content="马德茂的博客">
-<meta property="og:description" content="Be better, Be stronger">
+<meta property="og:description" content="本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：gif 格式图片详细解析 一.概述GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。 二.GIF文件结构基础知识GIF文件内部是按块来进行划分的，其中包括控制块（Control Block）和数">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-07T12:16:24.256Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="马德茂的博客">
-<meta name="twitter:description" content="Be better, Be stronger">
+<meta name="twitter:title" content="GIF文件学习（一）：GIF文件结构学习">
+<meta name="twitter:description" content="本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：gif 格式图片详细解析 一.概述GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。 二.GIF文件结构基础知识GIF文件内部是按块来进行划分的，其中包括控制块（Control Block）和数">
   
     <link rel="alternative" href="/atom.xml" title="马德茂的博客" type="application/atom+xml">
   
@@ -149,49 +150,222 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-GIF文件学习（一）：GIF文件结构学习" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-02T11:34:01.579Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-02</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/">GIF文件学习（一）：GIF文件结构学习</a>
+    <h1 class="article-title" itemprop="name">
+      GIF文件学习（一）：GIF文件结构学习
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/" class="archive-article-date">
+  	<time datetime="2018-08-02T11:34:01.579Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：<a href="https://blog.csdn.net/wzy198852/article/details/17266507" target="_blank" rel="noopener">gif 格式图片详细解析</a></p>
+<h1 id="一-概述"><a href="#一-概述" class="headerlink" title="一.概述"></a>一.概述</h1><p>GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。</p>
+<h1 id="二-GIF文件结构"><a href="#二-GIF文件结构" class="headerlink" title="二.GIF文件结构"></a>二.GIF文件结构</h1><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>GIF文件内部是按块来进行划分的，其中包括<strong>控制块（Control Block）</strong>和<strong>数据块（Data Sub-blcoks）</strong>两种。</p>
+<ul>
+<li><p>控制块是用来控制数据块行为的，不同的控制块一般包含不同的控制参数。</p>
+</li>
+<li><p>数据块是用来记载数据的，数据块是一组8-bit组成的数据流，其中每个数据块的大小最大为<strong>256字节</strong>，其中第一个字节用于指出该数据块所含字节数，即一个数据块记录数据所用字节最多为<strong>255字节</strong>。以下是数据块的结构：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">块大小</th><th>Blcok Size - 块大小，不包含这个字节</th></tr><tr><th>1</th><th colspan="8" bgcolor="green"></th><th rowspan="5">Data Values - 块数据，8-bit的字符串</th></tr><tr><th>2</th><th colspan="8" bgcolor="green"></th></tr><tr><th>…</th><th colspan="8" bgcolor="green"></th></tr><tr><th>254</th><th colspan="8" bgcolor="green"></th></tr><tr><th>255</th><th colspan="8" bgcolor="green"></th></tr></table>
 
+
+</li>
+</ul>
+<h2 id="GIF结构"><a href="#GIF结构" class="headerlink" title="GIF结构"></a>GIF结构</h2><p>GIF文件的结构为：<strong>文件头（File Header）</strong>、<strong>GIF数据流（GIF Data Stream）</strong>和<strong>文件终结器（Trailer）</strong>三部分。</p>
+<p>接下来详细讲解每部分的构成。</p>
+<h1 id="三-GIF各部分组成"><a href="#三-GIF各部分组成" class="headerlink" title="三.GIF各部分组成"></a>三.GIF各部分组成</h1><h2 id="1-文件头"><a href="#1-文件头" class="headerlink" title="1.文件头"></a>1.文件头</h2><p>文件头包含<strong>文件署名（Signature）</strong>和<strong>版本号（Version）</strong>两部分。</p>
+<h3 id="1-文件署名"><a href="#1-文件署名" class="headerlink" title="(1)文件署名"></a>(1)文件署名</h3><p>文件署名表示该文件是GIF文件，这部分由”GIF”三个字符组成：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">‘G’(0x47)</th><th rowspan="3">文件署名</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">‘I’(0x49)</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">“F”(0x46)</th></tr></table>
+
+<h3 id="2-版本号"><a href="#2-版本号" class="headerlink" title="(2)版本号"></a>(2)版本号</h3><p>版本号表示GIF版本号，有”87a”和”89a”两种：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">‘8’(0x38)</th><th rowspan="3">版本号</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">‘7’(0x39)或’9’(0x40)</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">“a”(0x61)</th></tr></table>
+
+
+<h2 id="2-GIF数据流"><a href="#2-GIF数据流" class="headerlink" title="2.GIF数据流"></a>2.GIF数据流</h2><p>GIF数据流包含<strong>逻辑屏幕标识符（Logical Screen Descriptor）</strong>、<strong>全局颜色列表（Global Color Table）</strong>和<strong>图像块（Image Block）</strong>三个基本部分以及一些扩展部分组成，扩展部分包括：<strong>图形控制扩展（Graphic Control Extension）</strong>、<strong>注释扩展（Comment Extension）</strong>、<strong>图形文本扩展（Plain Text Extension）</strong>以及<strong>应用程序扩展（Application Extension）</strong>四部分。</p>
+<h3 id="1-逻辑屏幕标识符"><a href="#1-逻辑屏幕标识符" class="headerlink" title="(1)逻辑屏幕标识符"></a>(1)逻辑屏幕标识符</h3><p>该部分由<strong>7个字节</strong>组成，结构为：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" rowspan="2" bgcolor="green">逻辑屏幕宽度</th><th rowspan="2">像素数，定义GIF图像宽度</th></tr><tr><th>1</th></tr><tr><th>2</th><th colspan="8" rowspan="2" bgcolor="green">逻辑屏幕高度</th><th rowspan="2">像素数，定义GIF图像高度</th></tr><tr><th>3</th></tr><tr><th>4</th><th bgcolor="green">m</th><th colspan="3" bgcolor="green">cr</th><th bgcolor="green">s</th><th colspan="3" bgcolor="green">pixel</th><th>具体描述见下</th></tr><tr><th>5</th><th colspan="8" bgcolor="green">背景色</th><th>背景颜色（在全局颜色列表中的索引，如果没有全局颜色列表，则该值没有意义）</th></tr><tr><th>6</th><th colspan="8" bgcolor="green">像素宽高比</th><th>像素宽高比</th></tr></table>
+
+<ul>
+<li>m：全局颜色列表标志，当置位时表示有全局颜色列表，pixel值有意义</li>
+<li>cr：颜色深度，cr+1确定图像的颜色深度</li>
+<li>s：分类标志，如果置位表示全局颜色列表分类排序</li>
+<li>pixel：全局颜色列表大小，pixel+1确定颜色列表的索引数（2的pixel+1次方）</li>
+</ul>
+<h3 id="2-全局颜色列表"><a href="#2-全局颜色列表" class="headerlink" title="(2)全局颜色列表"></a>(2)全局颜色列表</h3><p>全局颜色列表需要紧跟在逻辑屏幕标识符后，颜色列表中保存颜色的索引，其中每个索引又由三个字节（代表R、G、B）组成：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">索引1的R值</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">索引1的G值</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">索引1的B值</th></tr><tr><th>3</th><th colspan="8" bgcolor="green">索引2的R值</th></tr><tr><th>4</th><th colspan="8" bgcolor="green">索引2的G值</th></tr><tr><th>5</th><th colspan="8" bgcolor="green">索引2的B值</th></tr><tr><th>6</th><th colspan="8" bgcolor="green">…</th></tr></table>
+
+<h3 id="3-图像块"><a href="#3-图像块" class="headerlink" title="(3)图像块"></a>(3)图像块</h3><p>图像块由<strong>图像标识符（Image Descriptor）</strong>、<strong>局部颜色列表（Local Color Table）</strong>和<strong>基于颜色列表的图像数据（Table-Based Image Data）</strong>组成。</p>
+<h4 id="①图像标识符"><a href="#①图像标识符" class="headerlink" title="①图像标识符"></a>①图像标识符</h4><p>一个GIF中可以包含多张图片，新的图像以图像标识符开始，该部分由<strong>10个字节</strong>组成：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th bgcolor="green">0</th><th bgcolor="green">0</th><th bgcolor="green">1</th><th bgcolor="green">0</th><th bgcolor="green">1</th><th bgcolor="green">1</th><th bgcolor="green">0</th><th bgcolor="green">0</th><th>图像标识符开始，固定值’,’ (0x2C)</th></tr><tr><th>1</th><th colspan="8" rowspan="2" bgcolor="green">X方向偏移量</th><th rowspan="8">必须限制在逻辑屏幕尺寸范围内</th></tr><tr><th>2</th></tr><tr><th>3</th><th colspan="8" rowspan="2" bgcolor="green">Y方向偏移量</th></tr><tr><th>4</th></tr><tr><th>5</th><th colspan="8" rowspan="2" bgcolor="green">图像宽度</th></tr><tr><th>6</th></tr><tr><th>7</th><th colspan="8" rowspan="2" bgcolor="green">图像高度</th></tr><tr><th>8</th></tr><tr><th>10</th><th bgcolor="green">m</th><th bgcolor="green">i</th><th bgcolor="green">s</th><th colspan="2" bgcolor="green">r</th><th colspan="3" bgcolor="green">pixel</th><th>具体描述见下</th></tr></table>
+
+<ul>
+<li>m：局部颜色列表标志，当置位时表示图像标识符后有一个局部颜色列表，pixel值有意义</li>
+<li>i：交织标志，置位时图像数据使用交织方式排列，否则使用顺序排列</li>
+<li>s：分类标志，如果置位表示局部颜色列表分类排序</li>
+<li>r：保留，必须初始化为0</li>
+<li>pixel：局部颜色列表大小，pixel+1确定颜色列表的索引数（2的pixel+1次方）</li>
+</ul>
+<h4 id="②局部颜色列表"><a href="#②局部颜色列表" class="headerlink" title="②局部颜色列表"></a>②局部颜色列表</h4><p>结构格式与全部颜色列表一致：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">索引1的R值</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">索引1的G值</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">索引1的B值</th></tr><tr><th>3</th><th colspan="8" bgcolor="green">索引2的R值</th></tr><tr><th>4</th><th colspan="8" bgcolor="green">索引2的G值</th></tr><tr><th>5</th><th colspan="8" bgcolor="green">索引2的B值</th></tr><tr><th>6</th><th colspan="8" bgcolor="green">…</th></tr></table>
+
+<h4 id="③基于颜色列表的图像数据"><a href="#③基于颜色列表的图像数据" class="headerlink" title="③基于颜色列表的图像数据"></a>③基于颜色列表的图像数据</h4><p>图像数据是由<strong>LZW编码长度</strong>和<strong>N个数据块</strong>组成的：</p>
+<h4 id="LZW编码长度"><a href="#LZW编码长度" class="headerlink" title="LZW编码长度"></a>LZW编码长度</h4><table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">LZW编码长度</th><th>LZW编码初始码表大小的位数</th></tr></table>
+
+<h4 id="N个数据块"><a href="#N个数据块" class="headerlink" title="N个数据块"></a>N个数据块</h4><p>连续的N个数据块，其中最后一个数据块是由长度为0的数据块组成，即：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th><th rowspan="3">N组数据图像</th></tr><tr><th></th><th colspan="8" bgcolor="green">数据块</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th></tr><tr><th></th><th colspan="8" bgcolor="green">0x00</th><th>数据块大小为0，作为一组数据块的收尾</th></tr></table>
+
+<h3 id="4-图形控制扩展"><a href="#4-图形控制扩展" class="headerlink" title="(4)图形控制扩展"></a>(4)图形控制扩展</h3><p>该部分需要89a版本，可以放在一个<em>图像块</em>或<em>文本扩展块</em>前面，用来控制后面的图像或文本的渲染形式，结构如下：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">扩展块标识</th><th>扩展块开始标识，固定值0x21</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">图形控制扩展标识</th><th>图形控制扩展标识，固定值0xF9</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">块大小</th><th>不包含块终结器，固定值0x04</th></tr><tr><th>3</th><th colspan="3" bgcolor="green">保留</th><th colspan="3" bgcolor="green">处置方式</th><th bgcolor="green">i</th><th bgcolor="green">t</th><th>具体描述如下</th></tr><tr><th>4</th><th colspan="8" rowspan="2" bgcolor="green">延迟时间</th><th rowspan="2">单位1/100秒，如果值不为1，表示暂停规定时间后再继续处理下面数据流</th></tr><tr><th>5</th></tr><tr><th>6</th><th colspan="8" bgcolor="green">透明色索引</th><th>透明色索引值</th></tr><tr><th>7</th><th colspan="8" bgcolor="green">块终结器</th><th>标识块终结，固定值0x00</th></tr></table>
+
+<ul>
+<li>处置方法：指出处置图形的方法，当值为：0 - 不使用处置方法；1 - 不处置图形，把图形从当前位置移去；2 - 回复到背景色；3 - 回复到先前状态；4-7 - 自定义</li>
+<li>i：用户输入标志，指出是否期待用户有输入之后才继续进行下去，置位表示期待，值否表示不期待。用户输入可以是按回车键、鼠标点击等，可以和延迟时间一起使用，在设置的延迟时间内用户有输入则马上继续进行，或者没有输入直到延迟时间到达而继续</li>
+<li>t：透明颜色标志，置位表示使用透明颜色</li>
+</ul>
+<h3 id="5-注释扩展"><a href="#5-注释扩展" class="headerlink" title="(5)注释扩展"></a>(5)注释扩展</h3><p>该部分需要89a版本，可以用来记录图形、版权、描述等任何的非图形和控制的纯文本数据(7-bit ASCII字符)，注释扩展并不影响对图象数据流的处理，解码器完全可以忽略它。存放位置可以是数据流的任何地方，最好不要妨碍控制和数据块，推荐放在数据流的开始或结尾，结构如下：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">扩展块标识</th><th>扩展块开始标识，固定值0x21</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">注释扩展标识</th><th>注释控制扩展标识，固定值0xFE</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th><th rowspan="3">N组数据块</th></tr><tr><th></th><th colspan="8" bgcolor="green">注释块</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th></tr><tr><th></th><th colspan="8" bgcolor="green">0x00</th><th>数据块大小为0，作为一组数据块的收尾</th></tr></table>
+
+<h3 id="6-图形文本扩展"><a href="#6-图形文本扩展" class="headerlink" title="(6)图形文本扩展"></a>(6)图形文本扩展</h3><p>该部分需要89a版本，用来绘制一个简单的文本图象，这一部分由用来绘制的纯文本数据（7-bit ASCII字符）和控制绘制的参数等组成。绘制文本借助于一个文本框（Text Grid）来定义边界，在文本框中划分多个单元格，每个字符占用一个单元，绘制时按从左到右、从上到下的顺序依次进行，直到最后一个字符或者占满整个文本框（之后的字符将被忽略，因此定义文本框的大小时应该注意到是否可以容纳整个文本），绘制文本的颜色索引使用全局颜色列表，没有则可以使用一个已经保存的前一个颜色列表。另外，图形文本扩展块也属于图形块(Graphic Rendering Block)，可以在它前面定义图形控制扩展对它的表现形式进一步修改，结构如下：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">扩展块标识</th><th>扩展块开始标识，固定值0x21</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">注释扩展标识</th><th>注释控制扩展标识，固定值0x01</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">块大小</th><th>块大小，固定值0x0C</th></tr><tr><th>3</th><th colspan="8" rowspan="2" bgcolor="green">文本框左边界位置</th><th rowspan="2">像素值，文本框离逻辑屏幕的左边界距离</th></tr><tr><th>4</th></tr><tr><th>5</th><th colspan="8" rowspan="2" bgcolor="green">文本框上边界位置</th><th rowspan="2">像素值，文本框离逻辑屏幕的上边界距离</th></tr><tr><th>6</th></tr><tr><th>7</th><th colspan="8" rowspan="2" bgcolor="green">文本框宽度</th><th rowspan="2">像素值</th></tr><tr><th>8</th></tr><tr><th>9</th><th colspan="8" rowspan="2" bgcolor="green">文本框高度</th><th rowspan="2">像素值</th></tr><tr><th>10</th></tr><tr><th>11</th><th colspan="8" bgcolor="green">字符单元格宽度</th><th>像素值，单个单元格宽度</th></tr><tr><th>12</th><th colspan="8" bgcolor="green">字符单元格高度</th><th>像素值，单个单元格高度</th></tr><tr><th>13</th><th colspan="8" bgcolor="green">文本前景色索引</th><th>前景色在全局颜色列表中的索引</th></tr><tr><th>14</th><th colspan="8" bgcolor="green">文本背景色索引</th><th>背景色在全局颜色列表中索引</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th><th rowspan="3">N组数据块</th></tr><tr><th></th><th colspan="8" bgcolor="green">文本数据块</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th></tr><tr><th></th><th colspan="8" bgcolor="green">0x00</th><th>数据块大小为0，作为一组数据块的收尾</th></tr></table>
+
+<h3 id="7-应用程序扩展"><a href="#7-应用程序扩展" class="headerlink" title="(7)应用程序扩展"></a>(7)应用程序扩展</h3><p>该部分需要89a版本，应用程序可以在这里定义自己的标识、信息等，结构如下：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th>BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">扩展块标识</th><th>扩展块开始标识，固定值0x21</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">应用程序扩展标识</th><th>应用程序扩展标识，固定值0xFF</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">块大小</th><th>块大小，固定值0x0B</th></tr><tr><th>3</th><th colspan="8" rowspan="8" bgcolor="green">应用程序标识符</th><th rowspan="8">用来鉴别应用程序自身的标识（8个连续的ASCII字符）</th></tr><tr><th>4</th></tr><tr><th>5</th></tr><tr><th>6</th></tr><tr><th>7</th></tr><tr><th>8</th></tr><tr><th>9</th></tr><tr><th>10</th></tr><tr><th>11</th><th colspan="8" rowspan="3" bgcolor="green">应用程序鉴别码</th><th rowspan="3">应用程序定义的特殊标识码（3个连续ASCII字符）</th></tr><tr><th>12</th></tr><tr><th>13</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th><th rowspan="3">N组数据块</th></tr><tr><th></th><th colspan="8" bgcolor="green">应用程序数据</th></tr><tr><th></th><th colspan="8" bgcolor="green">…</th></tr><tr><th></th><th colspan="8" bgcolor="green">0x00</th><th>数据块大小为0，作为一组数据块的收尾</th></tr></table>
+
+<p>其中，现在最多使用的是网景公司定义的应用程序控制标识，该标识中定义了GIF播放的循环次数，结构如下：</p>
+<table><tr><th>BYTE</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th><th colspan="2">BIT</th></tr><tr><th>0</th><th colspan="8" bgcolor="green">扩展块标识</th><th colspan="2">扩展块开始标识，固定值0x21</th></tr><tr><th>1</th><th colspan="8" bgcolor="green">应用程序扩展标识</th><th colspan="2">应用程序扩展标识，固定值0xFF</th></tr><tr><th>2</th><th colspan="8" bgcolor="green">块大小</th><th colspan="2">块大小，固定值0x0B</th></tr><tr><th>3</th><th colspan="8" bgcolor="green">0x4E(‘N’)</th><th colspan="2" rowspan="8">NETSCAPE</th></tr><tr><th>4</th><th colspan="8" bgcolor="green">0x45(‘E’)</th></tr><tr><th>5</th><th colspan="8" bgcolor="green">0x54(‘T’)</th></tr><tr><th>6</th><th colspan="8" bgcolor="green">0x53(‘S’)</th></tr><tr><th>7</th><th colspan="8" bgcolor="green">0x43(‘C’)</th></tr><tr><th>8</th><th colspan="8" bgcolor="green">0x41(‘A’)</th></tr><tr><th>9</th><th colspan="8" bgcolor="green">0x50(‘P’)</th></tr><tr><th>10</th><th colspan="8" bgcolor="green">0x45(‘E’)</th></tr><tr><th>11</th><th colspan="8" bgcolor="green">0x32(‘2’)</th><th colspan="2" rowspan="3">2.0</th></tr><tr><th>12</th><th colspan="8" bgcolor="green">0x2E(‘.’)</th></tr><tr><th>13</th><th colspan="8" bgcolor="green">0x30(‘0’)</th></tr><tr><th>14</th><th colspan="8" bgcolor="green">0x03</th><th>该数据块长度为3字节(不包含该字节)</th><th rowspan="4">数据块</th></tr><tr><th>15</th><th colspan="8" bgcolor="green">0x01</th><th>数据块id</th></tr><tr><th>16</th><th colspan="8" rowspan="2" bgcolor="green">循环次数</th><th rowspan="2">循环次数</th></tr><tr><th>17</th></tr><tr><th>18</th><th colspan="8" bgcolor="green">0x00</th><th colspan="2">数据块大小为0，作为一组数据块的收尾</th></tr></table>
+
+
+<p>以上就是GIF文件的结构，下一篇文章将在iOS平台上对GIF文件直接操作进而达到对GIF调速的功能。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.mademao.com/2018/08/02/GIF文件学习（一）：GIF文件结构学习/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-  
-    </div></section>
+
   
 
-    
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
+  
+
+  
+
+  
+
+  
 
 
           </div>
@@ -214,8 +388,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
