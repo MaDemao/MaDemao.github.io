@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.mademao.com">
-  <title>Archives: 2018/8 | 马德茂的博客</title>
+  <title>GIF文件学习（二）：GIF文件结构学习 | 马德茂的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Be better, Be stronger">
-<meta property="og:type" content="website">
-<meta property="og:title" content="马德茂的博客">
-<meta property="og:url" content="http://www.mademao.com/archives/2018/08/index.html">
+  <meta name="description" content="本文在对GIF文件结构学习之后，在iOS平台上进行一些应用。 最近在开发的项目中，有一个需求如下：对GIF文件进行调速。  最开始由于项目中存在多种素材（视频、图片组、GIF以及Live Photo）转为GIF的需求，使用的是开源的FFmpeg来进行格式的转换来最终生成GIF。此方法需要额外导入FFmpeg库，造成安装包大小的增大，同时FFmpeg更多的是注重于各种格式图像素材的转换，而非对各种素">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIF文件学习（二）：GIF文件结构学习">
+<meta property="og:url" content="http://www.mademao.com/2018/08/07/GIF文件学习（二）：GIF文件结构学习/index.html">
 <meta property="og:site_name" content="马德茂的博客">
-<meta property="og:description" content="Be better, Be stronger">
+<meta property="og:description" content="本文在对GIF文件结构学习之后，在iOS平台上进行一些应用。 最近在开发的项目中，有一个需求如下：对GIF文件进行调速。  最开始由于项目中存在多种素材（视频、图片组、GIF以及Live Photo）转为GIF的需求，使用的是开源的FFmpeg来进行格式的转换来最终生成GIF。此方法需要额外导入FFmpeg库，造成安装包大小的增大，同时FFmpeg更多的是注重于各种格式图像素材的转换，而非对各种素">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-07T12:52:00.298Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="马德茂的博客">
-<meta name="twitter:description" content="Be better, Be stronger">
+<meta name="twitter:title" content="GIF文件学习（二）：GIF文件结构学习">
+<meta name="twitter:description" content="本文在对GIF文件结构学习之后，在iOS平台上进行一些应用。 最近在开发的项目中，有一个需求如下：对GIF文件进行调速。  最开始由于项目中存在多种素材（视频、图片组、GIF以及Live Photo）转为GIF的需求，使用的是开源的FFmpeg来进行格式的转换来最终生成GIF。此方法需要额外导入FFmpeg库，造成安装包大小的增大，同时FFmpeg更多的是注重于各种格式图像素材的转换，而非对各种素">
   
     <link rel="alternative" href="/atom.xml" title="马德茂的博客" type="application/atom+xml">
   
@@ -149,76 +150,186 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-GIF文件学习（二）：GIF文件结构学习" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      GIF文件学习（二）：GIF文件结构学习
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/07/GIF文件学习（二）：GIF文件结构学习/" class="archive-article-date">
+
+        
+        <a href="/2018/08/07/GIF文件学习（二）：GIF文件结构学习/" class="archive-article-date">
   	<time datetime="2018-08-07T12:20:36.420Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-07</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/07/GIF文件学习（二）：GIF文件结构学习/">GIF文件学习（二）：GIF文件结构学习</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文在对GIF文件结构学习之后，在iOS平台上进行一些应用。</p>
+<p>最近在开发的项目中，有一个需求如下：对GIF文件进行调速。</p>
+<ul>
+<li>最开始由于项目中存在多种素材（视频、图片组、GIF以及Live Photo）转为GIF的需求，使用的是开源的FFmpeg来进行格式的转换来最终生成GIF。此方法需要额外导入FFmpeg库，造成安装包大小的增大，同时FFmpeg更多的是注重于各种格式图像素材的转换，而非对各种素材进行调速等处理（虽然也能很容易达到，但是极其耗时）。</li>
+<li>之后技术实现换为FFmpeg负责格式的转换，而对GIF文件数据流进行直接操作覆写达到调速功能。（虽然最终整体换为iOS平台的ImageIO框架，但是还是有必要记录一下该思路的）。</li>
+</ul>
+<a id="more"></a>
+<h1 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h1><p>通过上一篇文章的学习，我们可以知道，对于GIF调速，本质上就是修改GIF中每张图片的持续时间，该持续时间存储在<strong>图形控制扩展</strong>的第4、5字节中，所以我们只需直接修改对应位置的数据即可，同时为了保证速度，我们可以对GIF中其余控制块与数据块进行跳过处理。</p>
+<h1 id="方法入口"><a href="#方法入口" class="headerlink" title="方法入口"></a>方法入口</h1><p>首先我们提供两种修改方式：（1）直接修改持续时间；（2）在原有基础上按倍数修改持续时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef enum : NSUInteger &#123;</span><br><span class="line">    GIFChangeSpeedTypeMultiple,</span><br><span class="line">    GIFChangeSpeedTypeValue</span><br><span class="line">&#125; GIFChangeSpeedType;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> 修改源文件调整GIF帧间距</span><br><span class="line"> @param gifFilePath GIF所在路径</span><br><span class="line"> @param changeSpeedType 调整方式</span><br><span class="line"> @param value 若为multiple方式，则是原先的倍数；若为value方式，则是帧间隔，单位s</span><br><span class="line"> </span><br><span class="line"> @return 调整结果</span><br><span class="line"> */</span><br><span class="line">+ (BOOL)changeGIFSpeedWithGIFFilePath:(NSString *)gifFilePath changeSpeedType:(GIFChangeSpeedType)changeSpeedType value:(CGFloat)value;</span><br></pre></td></tr></table></figure>
+<h1 id="辅助方法"><a href="#辅助方法" class="headerlink" title="辅助方法"></a>辅助方法</h1><p>在处理数据过程中，我们需要一些辅助方法：</p>
+<h2 id="获取某字节数据的十六位表达"><a href="#获取某字节数据的十六位表达" class="headerlink" title="获取某字节数据的十六位表达"></a>获取某字节数据的十六位表达</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">///获取对应data的数据</span><br><span class="line">+ (BOOL)p_getUint8WithData:(NSData *)data result:(uint8_t *)result &#123;</span><br><span class="line">    if (data.length == 0 || result == NULL) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    CFDataRef dataRef = (__bridge CFDataRef)data;</span><br><span class="line">    const char *bytes = (char *)CFDataGetBytePtr(dataRef);</span><br><span class="line">    *result = *((uint8_t *)bytes);</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><h2 id="判断文件是否存在"><a href="#判断文件是否存在" class="headerlink" title="判断文件是否存在"></a>判断文件是否存在</h2><p>我们首先需要判断指定的文件是否存在：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//判断文件是否存在</span><br><span class="line">if (gifFilePath == nil || ![[NSFileManager defaultManager] fileExistsAtPath:gifFilePath]) &#123;</span><br><span class="line">    return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="判断文件是否可以正常打开"><a href="#判断文件是否可以正常打开" class="headerlink" title="判断文件是否可以正常打开"></a>判断文件是否可以正常打开</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:gifFilePath];</span><br><span class="line"></span><br><span class="line">//判断是否正常打开文件</span><br><span class="line">if (fileHandle == nil) &#123;</span><br><span class="line">    return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="判断指定文件是否为GIF文件"><a href="#判断指定文件是否为GIF文件" class="headerlink" title="判断指定文件是否为GIF文件"></a>判断指定文件是否为GIF文件</h2><p>对于GIF文件的判断，我们可以从GIF文件结构入手，GIF文件开头为<strong>GIF</strong>三个字符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">///检查是否为GIF</span><br><span class="line">+ (BOOL)p_checkGIF:(NSFileHandle *)fileHandle &#123;</span><br><span class="line">    if (fileHandle == nil) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    [fileHandle seekToFileOffset:0];</span><br><span class="line">    uint8_t g;</span><br><span class="line">    uint8_t i;</span><br><span class="line">    uint8_t f;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;g] == YES &amp;&amp; g == 0x47 &amp;&amp;</span><br><span class="line">        [self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;i] == YES &amp;&amp; i == 0x49 &amp;&amp;</span><br><span class="line">        [self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;f] == YES &amp;&amp; f == 0x46) &#123;</span><br><span class="line">        return YES;</span><br><span class="line">    &#125;</span><br><span class="line">    return NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="判断是否有全局颜色列表"><a href="#判断是否有全局颜色列表" class="headerlink" title="判断是否有全局颜色列表"></a>判断是否有全局颜色列表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/读取是否含有全局颜色列表</span><br><span class="line">uint8_t hasGlobalColorTable = 0x00;</span><br><span class="line">if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;hasGlobalColorTable] == NO) &#123;</span><br><span class="line">    return NO;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (hasGlobalColorTable &gt;= 0x80) &#123;</span><br><span class="line">    //存在全局颜色列表，跳过全局颜色列表</span><br><span class="line">    NSUInteger pixel = (NSUInteger)(((uint8_t)(hasGlobalColorTable &lt;&lt; 5)) &gt;&gt; 5);</span><br><span class="line">    //全局颜色列表大小为 3 * 2的(pixel + 1)次方</span><br><span class="line">    [fileHandle seekToFileOffset:fileHandle.offsetInFile + (3 * pow(2, pixel + 1))];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="循环处理控制块与数据块"><a href="#循环处理控制块与数据块" class="headerlink" title="循环处理控制块与数据块"></a>循环处理控制块与数据块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">while (YES) &#123;</span><br><span class="line">    //标识</span><br><span class="line">    uint8_t identifier;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;identifier] == NO) &#123;  //读取完毕</span><br><span class="line">        [fileHandle synchronizeFile];</span><br><span class="line">        [fileHandle closeFile];</span><br><span class="line">        return YES;</span><br><span class="line">    &#125;</span><br><span class="line">    if (identifier == 0x21) &#123;   //处理可能为标识块的数据</span><br><span class="line">        [self p_handleIdentifierBlockWithFileHandle:fileHandle changeSpeedType:changeSpeedType value:value];</span><br><span class="line">    &#125; else if (identifier == 0x2c) &#123;    //处理图像</span><br><span class="line">        [self p_handleImageDataWithFileHandle:fileHandle];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="处理控制块"><a href="#处理控制块" class="headerlink" title="处理控制块"></a>处理控制块</h3><p>其中标识为<strong>0x21</strong>为控制块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">///处理可能为标识块的数据</span><br><span class="line">+ (void)p_handleIdentifierBlockWithFileHandle:(NSFileHandle *)fileHandle changeSpeedType:(GIFChangeSpeedType)changeSpeedType value:(CGFloat)value &#123;</span><br><span class="line">    uint8_t subIdentifier = 0x00;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;subIdentifier]) &#123;</span><br><span class="line">        if (subIdentifier == 0xf9) &#123;    //可能为图形控制拓展</span><br><span class="line">            [self p_handleGraphicControlExtensionWithFileHandle:fileHandle changeSpeedType:changeSpeedType value:value];</span><br><span class="line">        &#125; else if (subIdentifier == 0xfe) &#123; //确定为注释拓展</span><br><span class="line">            [self p_handleCommentExtensionWithFileHandle:fileHandle];</span><br><span class="line">        &#125; else if (subIdentifier == 0x01) &#123; //可能为图形文本拓展</span><br><span class="line">            [self p_handlePlainTextExtensionWithFileHandle:fileHandle];</span><br><span class="line">        &#125; else if (subIdentifier == 0xff) &#123; //可能为应用程序扩展</span><br><span class="line">            [self p_handleApplicationExtensionWithFileHandle:fileHandle];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="处理图形控制扩展"><a href="#处理图形控制扩展" class="headerlink" title="处理图形控制扩展"></a>处理图形控制扩展</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">///处理可能为图形控制拓展</span><br><span class="line">+ (void)p_handleGraphicControlExtensionWithFileHandle:(NSFileHandle *)fileHandle changeSpeedType:(GIFChangeSpeedType)changeSpeedType value:(CGFloat)value &#123;</span><br><span class="line">    uint8_t subSubIdentifier = 0x00;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;subSubIdentifier]) &#123;</span><br><span class="line">        if (subSubIdentifier == 0x04) &#123; //确认为图形控制拓展</span><br><span class="line">            //跳过一个字节的信息</span><br><span class="line">            [fileHandle seekToFileOffset:fileHandle.offsetInFile + 1];</span><br><span class="line">            </span><br><span class="line">            //查看是否有标识块终结</span><br><span class="line">            [fileHandle seekToFileOffset:fileHandle.offsetInFile + 3];</span><br><span class="line">            </span><br><span class="line">            //Block Terminator - 标识块终结，固定值0</span><br><span class="line">            uint8_t blockTerminator;</span><br><span class="line">            if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;blockTerminator] == YES &amp;&amp; blockTerminator ==  0x00) &#123;</span><br><span class="line">                [fileHandle seekToFileOffset:fileHandle.offsetInFile - 4];</span><br><span class="line">                </span><br><span class="line">                uint8_t low = 0x00;</span><br><span class="line">                uint8_t high = 0x00;</span><br><span class="line">                if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;low] &amp;&amp;</span><br><span class="line">                    [self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;high]) &#123;</span><br><span class="line">//                    NSLog(@&quot;%02x %02x&quot;, low, high);</span><br><span class="line">                    [self p_changeSpeedWithLow:low high:high fileHandle:fileHandle changeSpeedType:changeSpeedType value:value];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在图形控制扩展中，我们可以直接修改读取到的持续时间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">///调速</span><br><span class="line">+ (void)p_changeSpeedWithLow:(uint8_t)low high:(uint8_t)high fileHandle:(NSFileHandle *)fileHandle changeSpeedType:(GIFChangeSpeedType)changeSpeedType value:(CGFloat)value &#123;</span><br><span class="line">    NSUInteger speed = 0;</span><br><span class="line">    if (changeSpeedType == GIFChangeSpeedTypeMultiple) &#123;</span><br><span class="line">        speed = (NSUInteger)((uint16_t)(high &lt;&lt; 8 | low));</span><br><span class="line">        speed *= value;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        //文件中存储的时间单位为 1/ 100 s</span><br><span class="line">        speed = value * 100;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    uint16_t newSpeed = (uint16_t)speed;</span><br><span class="line">    uint8_t newLow = newSpeed &amp; 0x00FF;</span><br><span class="line">    uint8_t newHigh = (newSpeed &amp; 0xFF00) &gt;&gt; 8;</span><br><span class="line">    </span><br><span class="line">    NSData *data = nil;</span><br><span class="line">    [fileHandle seekToFileOffset:fileHandle.offsetInFile - 2];</span><br><span class="line">    </span><br><span class="line">    data = [NSData dataWithBytes:(const void *)&amp;newLow length:1];</span><br><span class="line">    [fileHandle writeData:data];</span><br><span class="line">    </span><br><span class="line">    data = [NSData dataWithBytes:(const void *)&amp;newHigh length:1];</span><br><span class="line">    [fileHandle writeData:data];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="处理注释扩展"><a href="#处理注释扩展" class="headerlink" title="处理注释扩展"></a>处理注释扩展</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">///处理注释拓展</span><br><span class="line">+ (void)p_handleCommentExtensionWithFileHandle:(NSFileHandle *)fileHandle &#123;</span><br><span class="line">    //在判断注释拓展时已经处理了拓展块标识和注释块标签，直接处理注释块和块终结器就好</span><br><span class="line">    [self p_handleDataBlockWithFileHandle:fileHandle];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="处理图形文本扩展"><a href="#处理图形文本扩展" class="headerlink" title="处理图形文本扩展"></a>处理图形文本扩展</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">///处理可能为图形文本拓展</span><br><span class="line">+ (void)p_handlePlainTextExtensionWithFileHandle:(NSFileHandle *)fileHandle &#123;</span><br><span class="line">    uint8_t subSubIdentifier = 0x00;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;subSubIdentifier]) &#123;</span><br><span class="line">        if (subSubIdentifier == 0x0c) &#123; //确认为图形文本拓展</span><br><span class="line">            //跳过2字节文本框左边界位置，2字节文本框上边界位置，2字节文本框高度，2字节文本框高度，1字节字符单元格宽度，1字节字符单元格高度，1字节文本前景色索引，1字节文本背景色索引</span><br><span class="line">            [fileHandle seekToFileOffset:fileHandle.offsetInFile + 12];</span><br><span class="line">            </span><br><span class="line">            //跳过文本数据块</span><br><span class="line">            [self p_handleDataBlockWithFileHandle:fileHandle];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="处理应用持续扩展"><a href="#处理应用持续扩展" class="headerlink" title="处理应用持续扩展"></a>处理应用持续扩展</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">///处理可能为应用程序扩展</span><br><span class="line">+ (void)p_handleApplicationExtensionWithFileHandle:(NSFileHandle *)fileHandle &#123;</span><br><span class="line">    uint8_t subSubIdentifier = 0x00;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;subSubIdentifier]) &#123;</span><br><span class="line">        if (subSubIdentifier == 0x0b) &#123; //确定为应用程序扩展</span><br><span class="line">            //跳过8字节的应用程序标识符，3字节的应用程序鉴别码</span><br><span class="line">            [fileHandle seekToFileOffset:fileHandle.offsetInFile + 11];</span><br><span class="line">            </span><br><span class="line">            //跳过应用程序数据数据块</span><br><span class="line">            [self p_handleDataBlockWithFileHandle:fileHandle];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="处理数据块"><a href="#处理数据块" class="headerlink" title="处理数据块"></a>处理数据块</h3><p>数据块的长度在每个数据块第一个字节指明了，在数据块组结束时，末尾会有一个长度为0x00的数据块为结束标志。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">///跳过数据块</span><br><span class="line">+ (void)p_handleDataBlockWithFileHandle:(NSFileHandle *)fileHandle &#123;</span><br><span class="line">    //读取块大小</span><br><span class="line">    uint8_t blockSize = 0x00;</span><br><span class="line">    if ([self p_getUint8WithData:[fileHandle readDataOfLength:1] result:&amp;blockSize]) &#123;</span><br><span class="line">        if (blockSize == 0x00) &#123;    //读取完毕(如果某个数据子块的第一个字节数值为0，即该数据子块中没有包含任何有用数据，则该子块称为块终结符，用来标识数据子块到此结束)</span><br><span class="line">            return;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            [fileHandle seekToFileOffset:fileHandle.offsetInFile + (NSUInteger)blockSize];</span><br><span class="line">            //继续处理</span><br><span class="line">            [self p_handleDataBlockWithFileHandle:fileHandle];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是iOS对于GIF文件数据流直接处理达到调速功能，<a href="https://github.com/mademao/ChangeGifSpeed" target="_blank" rel="noopener">Demo地址</a></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.mademao.com/2018/08/07/GIF文件学习（二）：GIF文件结构学习/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-02T11:34:01.579Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-02</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">GIF文件学习（一）：GIF文件结构学习</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/02/GIF文件学习（一）：GIF文件结构学习/">GIF文件学习（一）：GIF文件结构学习</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -241,8 +352,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
