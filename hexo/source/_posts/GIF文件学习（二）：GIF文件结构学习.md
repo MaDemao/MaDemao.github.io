@@ -289,4 +289,4 @@ while (YES) {
 }
 ```
 
-以上就是iOS对于GIF文件数据流直接处理达到调速功能，[Demo地址](https://github.com/mademao/ChangeGifSpeed)
+以上就是iOS对于GIF文件数据流直接处理达到调速功能，[Demo地址](https://github.com/mademao/ChangeGifSpeed/Valhalla)下**Valhalla/Valhalla/ImageAndGraphics/GIFSpeed**文件夹
