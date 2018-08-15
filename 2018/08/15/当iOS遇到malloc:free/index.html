@@ -6,18 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.mademao.com">
-  <title>马德茂的博客</title>
+  <title>当iOS遇到malloc/free | 马德茂的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Be better, Be stronger">
-<meta property="og:type" content="website">
-<meta property="og:title" content="马德茂的博客">
-<meta property="og:url" content="http://www.mademao.com/index.html">
+  <meta name="description" content="最近在用8叉树为图片生成配色板，又回到了C语言的天下。 美滋滋的写完代码、运行代码，嗯，配色板出来了，而且符合预期。 But，这个程序是运行在iOS平台上的，顺带看了一下跑代码时候的内存，哎，爆炸">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当iOS遇到malloc&#x2F;free">
+<meta property="og:url" content="http://www.mademao.com/2018/08/15/当iOS遇到malloc:free/index.html">
 <meta property="og:site_name" content="马德茂的博客">
-<meta property="og:description" content="Be better, Be stronger">
+<meta property="og:description" content="最近在用8叉树为图片生成配色板，又回到了C语言的天下。 美滋滋的写完代码、运行代码，嗯，配色板出来了，而且符合预期。 But，这个程序是运行在iOS平台上的，顺带看了一下跑代码时候的内存，哎，爆炸">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.mademao.com/blog/iOS_malloc/memory.png">
+<meta property="og:image" content="http://www.mademao.com/blog/iOS_malloc/after_memory.png">
+<meta property="og:updated_time" content="2018-08-15T13:03:37.982Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="马德茂的博客">
-<meta name="twitter:description" content="Be better, Be stronger">
+<meta name="twitter:title" content="当iOS遇到malloc&#x2F;free">
+<meta name="twitter:description" content="最近在用8叉树为图片生成配色板，又回到了C语言的天下。 美滋滋的写完代码、运行代码，嗯，配色板出来了，而且符合预期。 But，这个程序是运行在iOS平台上的，顺带看了一下跑代码时候的内存，哎，爆炸">
+<meta name="twitter:image" content="http://www.mademao.com/blog/iOS_malloc/memory.png">
   
     <link rel="alternative" href="/atom.xml" title="马德茂的博客" type="application/atom+xml">
   
@@ -149,16 +153,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-当iOS遇到malloc:free" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-当iOS遇到malloc:free" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/15/当iOS遇到malloc:free/">当iOS遇到malloc/free</a>
+    <h1 class="article-title" itemprop="name">
+      当iOS遇到malloc/free
     </h1>
   
 
@@ -174,77 +176,58 @@
         <p>最近在用8叉树为图片生成配色板，又回到了C语言的天下。</p>
 <p>美滋滋的写完代码、运行代码，嗯，配色板出来了，而且符合预期。</p>
 <p>But，这个程序是运行在iOS平台上的，顺带看了一下跑代码时候的内存，哎，爆炸</p>
-        
-          <a class="article-more-a" href="/2018/08/15/当iOS遇到malloc:free/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-GIF文件学习（二）：GIF文件结构学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/">GIF文件学习（二）：GIF文件结构学习</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-09T11:15:42.818Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文在对GIF文件结构学习之后，在iOS平台上进行一些应用。</p>
-<p>最近在开发的项目中，有一个需求如下：对GIF文件进行调速。</p>
+<a id="more"></a>
+<p><img src="/blog/iOS_malloc/memory.png" alt="内存"></p>
+<p>接下来就是反思解决问题了：</p>
+<ol>
+<li>代码中无任何多余的Objective-C代码，所以由于Objective-C内存管理引起的问题不存在。</li>
+<li>代码中与8叉树生成调色板相关代码为C语言代码，在其中有多次的malloc申请内存。</li>
+<li>检查malloc申请的内存，确认都使用free进行了释放，不存在未释放情况。</li>
+</ol>
+<p>既然如此，那么为何还会有如此高的内存？</p>
+<p>以前在使用malloc与free时，是在Windows系统下，在free之后内存会释放，由于此时是在iOS系统之下，是否与这有关系呢？</p>
+<p>查阅资料后发现，确实与系统有关：</p>
 <ul>
-<li>最开始由于项目中存在多种素材（视频、图片组、GIF以及Live Photo）转为GIF的需求，使用的是开源的FFmpeg来进行格式的转换来最终生成GIF。此方法需要额外导入FFmpeg库，造成安装包大小的增大，同时FFmpeg更多的是注重于各种格式图像素材的转换，而非对各种素材进行调速等处理（虽然也能很容易达到，但是极其耗时）。</li>
-<li>之后技术实现换为FFmpeg负责格式的转换，而对GIF文件数据流进行直接操作覆写达到调速功能。（虽然最终整体换为iOS平台的ImageIO框架，但是还是有必要记录一下该思路的）。</li>
+<li>Windows 平台调用free，内存会马上降回来。</li>
+<li>Linux 平台调用free，内存不会释放回OS，而是释放回系统的内存缓冲池，进程退出时才释放回OS。</li>
+<li>iOS 平台调用 free 后，也只是释放到系统的内存缓冲池里，进程退出才释放回OS。</li>
 </ul>
-        
-          <a class="article-more-a" href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/#more">more >></a>
-        
+<p>原因找到了，仅仅是简单的malloc/free并不能及时的释放内存，那么该如何解决呢。</p>
+<p>记得以前看过，iOS在ARC之后管理内存其实是针对于<strong>malloc_default_zone</strong>进行管理的，那么是否有可以自定义<strong>malloc_zone</strong>来进行操作呢？</p>
+<p>很幸运的是，我在系统的<strong>malloc/malloc.h</strong>中发现了关于<strong>malloc_zone_t</strong>的定义，看来可以自定义zone来进行内存区域管理了。</p>
+<p>在头文件中，发现了以下有关函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* Creates a new zone with default behavior and registers it */</span><br><span class="line">extern malloc_zone_t *malloc_create_zone(vm_size_t start_size, unsigned flags);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* Destroys zone and everything it allocated */</span><br><span class="line">extern void malloc_destroy_zone(malloc_zone_t *zone);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* Allocates a new pointer of size size; zone must be non-NULL */</span><br><span class="line">extern void *malloc_zone_malloc(malloc_zone_t *zone, size_t size);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* Frees pointer in zone; zone must be non-NULL */</span><br><span class="line">extern void malloc_zone_free(malloc_zone_t *zone, void *ptr);</span><br></pre></td></tr></table></figure>
+<p>由此看来，我们可以在执行算法之前，手动申请一个新的<strong>malloc_zone_t</strong>，然后使用<strong>malloc_zone_malloc/malloc_zone_free</strong>方法进行正常的内存申请/释放，在最后可以使用<strong>malloc_destory_zone</strong>来对<strong>malloc_zone_t</strong>进行销毁。</p>
+<p>然后就是对代码进行改动，改完之后的效果如下：</p>
+<p><img src="/blog/iOS_malloc/after_memory.png" alt="内存"></p>
+<p>并且，在每次调用<strong>malloc_zone_free</strong>时，内存都得到了及时的释放，而并不是在销毁<strong>malloc_zone_t</strong>时才会释放相关内存。</p>
+
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -255,10 +238,73 @@
       
 
       
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.mademao.com/2018/08/15/当iOS遇到malloc:free/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">GIF文件学习（二）：GIF文件结构学习</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -278,70 +324,14 @@
 
 
 
-
   
-    <article id="post-GIF文件学习（一）：GIF文件结构学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/09/GIF文件学习（一）：GIF文件结构学习/">GIF文件学习（一）：GIF文件结构学习</a>
-    </h1>
   
 
-        
-        <a href="/2018/08/09/GIF文件学习（一）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-09T11:15:42.818Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文对GIF文件的存储方式进行分析与讲解，本文参考文章地址为：<a href="https://blog.csdn.net/wzy198852/article/details/17266507" target="_blank" rel="noopener">gif 格式图片详细解析</a></p>
-<h1 id="一-概述"><a href="#一-概述" class="headerlink" title="一.概述"></a>一.概述</h1><p>GIF图像是有CompuServe公司开发的图形文件格式，GIF图像是基于颜色列表的（即GIF文件中存储的数据为该点的颜色在颜色列表中的索引值），同时GIF最多支持8位（即256色）的颜色展示。</p>
-        
-          <a class="article-more-a" href="/2018/08/09/GIF文件学习（一）：GIF文件结构学习/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
+  
 
   
+
   
 
 
@@ -364,8 +354,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
