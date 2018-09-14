@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.mademao.com">
-  <title>Archives: 2018 | 马德茂的博客</title>
+  <title>深入浅出理解Method Swizzle | 马德茂的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Be better, Be stronger">
-<meta property="og:type" content="website">
-<meta property="og:title" content="马德茂的博客">
-<meta property="og:url" content="http://www.mademao.com/archives/2018/index.html">
+  <meta name="description" content="对于iOS开发者来说，runtime可以说是必须了解的知识，而我们使用runtime可以做到很多事情，其中就包括Method Swizzle。 那么Method Swizzle是什么呢？我们都知道，Objective-C是一门动态语言，它的方法调用使用的是消息机制，即在运行过程中确定方法的具体调用，例如我们有如下代码[person sayHello];，我们在实际调用的时候才能确定具体调用的方法代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入浅出理解Method Swizzle">
+<meta property="og:url" content="http://www.mademao.com/2018/09/14/深入浅出理解Method Swizzle/index.html">
 <meta property="og:site_name" content="马德茂的博客">
-<meta property="og:description" content="Be better, Be stronger">
+<meta property="og:description" content="对于iOS开发者来说，runtime可以说是必须了解的知识，而我们使用runtime可以做到很多事情，其中就包括Method Swizzle。 那么Method Swizzle是什么呢？我们都知道，Objective-C是一门动态语言，它的方法调用使用的是消息机制，即在运行过程中确定方法的具体调用，例如我们有如下代码[person sayHello];，我们在实际调用的时候才能确定具体调用的方法代">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.mademao.com/blog/MethodSwizzle/Runtime_Class.png">
+<meta property="og:updated_time" content="2018-09-14T07:49:30.669Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="马德茂的博客">
-<meta name="twitter:description" content="Be better, Be stronger">
+<meta name="twitter:title" content="深入浅出理解Method Swizzle">
+<meta name="twitter:description" content="对于iOS开发者来说，runtime可以说是必须了解的知识，而我们使用runtime可以做到很多事情，其中就包括Method Swizzle。 那么Method Swizzle是什么呢？我们都知道，Objective-C是一门动态语言，它的方法调用使用的是消息机制，即在运行过程中确定方法的具体调用，例如我们有如下代码[person sayHello];，我们在实际调用的时候才能确定具体调用的方法代">
+<meta name="twitter:image" content="http://www.mademao.com/blog/MethodSwizzle/Runtime_Class.png">
   
     <link rel="alternative" href="/atom.xml" title="马德茂的博客" type="application/atom+xml">
   
@@ -149,130 +152,230 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-深入浅出理解Method Swizzle" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      深入浅出理解Method Swizzle
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/14/深入浅出理解Method Swizzle/" class="archive-article-date">
+
+        
+        <a href="/2018/09/14/深入浅出理解Method Swizzle/" class="archive-article-date">
   	<time datetime="2018-09-14T03:45:47.418Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-14</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/14/深入浅出理解Method Swizzle/">深入浅出理解Method Swizzle</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对于iOS开发者来说，runtime可以说是必须了解的知识，而我们使用runtime可以做到很多事情，其中就包括Method Swizzle。</p>
+<p>那么Method Swizzle是什么呢？我们都知道，Objective-C是一门动态语言，它的方法调用使用的是消息机制，即在运行过程中确定方法的具体调用，例如我们有如下代码<code>[person sayHello];</code>，我们在实际调用的时候才能确定具体调用的方法代码。</p>
+<a id="more"></a>
+<p>那么runtime是如何做到这点的呢？我们来进行一下讨论。</p>
+<h1 id="runtime方法调用机制"><a href="#runtime方法调用机制" class="headerlink" title="runtime方法调用机制"></a>runtime方法调用机制</h1><p>首先，我们可以使用runtime的API获取到OC类中的所有方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Method * class_copyMethodList(Class cls, unsigned int * outCount);</span><br></pre></td></tr></table></figure>
+<p>该API返回一个<code>Method</code>类型的指针，即可以理解为返回<code>Method</code>数组，其中每一个<code>Method</code>都表示该类中的一个方法。</p>
+<p>我们看一下<code>Method</code>是什么：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct method_t *Method;</span><br><span class="line"></span><br><span class="line">struct method_t &#123;</span><br><span class="line">    SEL name;</span><br><span class="line">    const char *types;</span><br><span class="line">    IMP imp;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Method是method_t结构体的指针，而method_t结构体包含三部分，分别为<code>SEL</code>、<code>types</code>、<code>IMP</code>。</p>
+<ol>
+<li><code>SEL</code>表示方法的名称，我们在OC中一般使用<code>@selector(numberWithObject:)</code>来获取。同时由该方法可以看出，OC的方法名中并没有包含任何返回值以及参数类型信息，所以对于SEL来说，<code>- (void)numberWithObject:(id)object</code>与<code>- (id)numberWithObject:(NSString *)string</code>对于的方法名是一致的。</li>
+<li><code>types</code>表示该方法的类型，虽然SEL无法确定同名方法中返回值以及参数类型的不同，但是types可以辅助SEL完成这一点。对于OC中各个类型的表示方式，可以参考<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100-SW1" target="_blank" rel="noopener">官方文档</a>。</li>
+<li><code>IMP</code>在官方文档的描述为：An opaque type that represents a method selector。即对应Method中SEL所表示代码内存的指针。</li>
+</ol>
+<p>了解完Method的构造，我们再回到runtime调用方法的机制上。</p>
+<p>我们都知道，runtime在调用方法时，最终都会转换为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id objc_msgSend(id self, SEL op, ...);</span><br></pre></td></tr></table></figure>
+<p>由此我们可以看出，在进行方法调用时，会根据方法的SEL来进行调用，而可以通过对应SEL所在的Method，进而获取到对应的IMP，从而完成整个方法的动态调用。</p>
+<p>而在该过程中，我们可以通过修改IMP的指向，进而达到修改方法实现的目的。这就是Method Swizzle。</p>
+<h1 id="Method-Swizzle实现"><a href="#Method-Swizzle实现" class="headerlink" title="Method Swizzle实现"></a>Method Swizzle实现</h1><p>了解了Method Swizzle的概念，我们来实现一下Method Swizzle。</p>
+<p>首先我们定义一个用来实验的Model类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@interface Model : NSObject</span><br><span class="line"></span><br><span class="line">- (void)sayHello;</span><br><span class="line"></span><br><span class="line">- (void)sayHi;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Model</span><br><span class="line"></span><br><span class="line">- (void)sayHello &#123;</span><br><span class="line">    NSLog(@&quot;Say Hello&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)sayHi &#123;</span><br><span class="line">    NSLog(@&quot;Say Hi&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>要实现Method Swizzle，我们可以很容易的在runtime的API中找到如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/** </span><br><span class="line"> * Exchanges the implementations of two methods.</span><br><span class="line"> */</span><br><span class="line">void method_exchangeImplementations(Method m1, Method m2);</span><br></pre></td></tr></table></figure>
+<p>我们对它进行简单的封装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void exchangeMethod(Class cls, SEL originalSelector, SEL newSelector) &#123;</span><br><span class="line">    Method originalMethod = class_getInstanceMethod(cls, originalSelector);</span><br><span class="line">    Method newMethod = class_getInstanceMethod(cls, newSelector);</span><br><span class="line">    method_exchangeImplementations(originalMethod, newMethod);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后使用我们封装的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Model *model = [[Model alloc] init];</span><br><span class="line">[model sayHello];</span><br><span class="line">[model sayHi];</span><br><span class="line"></span><br><span class="line">exchangeMethod([Model class], @selector(sayHello), @selector(sayHi));</span><br><span class="line"></span><br><span class="line">[model sayHello];</span><br><span class="line">[model sayHi];</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Say Hello</span><br><span class="line">Say Hi</span><br><span class="line">Say Hi</span><br><span class="line">Say Hello</span><br></pre></td></tr></table></figure>
+<p>我们可以发现，此时两个方法的实现已经被调换，该方法完成了我们预期想要做的事情。</p>
+<p>那么Method Swizzle是否就如此简单呢？答案并不是。</p>
+<h1 id="进一步探讨"><a href="#进一步探讨" class="headerlink" title="进一步探讨"></a>进一步探讨</h1><p>我们知道，子类可以继承父类中的方法，那么子类中的方法来源就有两个：自己本身以及继承父类。</p>
+<p>现在我们定义两个类，来探索一下交换继承父类方法会造成什么影响：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@interface SuperModel: NSObject</span><br><span class="line"></span><br><span class="line">- (void)sayHello;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation SuperModel</span><br><span class="line"></span><br><span class="line">- (void)sayHello &#123;</span><br><span class="line">    NSLog(@&quot;Say Hello&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface SubModel: SuperModel</span><br><span class="line"></span><br><span class="line">- (void)sayHi;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation SubModel</span><br><span class="line"></span><br><span class="line">- (void)sayHi &#123;</span><br><span class="line">    NSLog(@&quot;Say Hi&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>然后我们进行如下代码实验：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SuperModel *superModel = [[SuperModel alloc] init];</span><br><span class="line">[superModel sayHello];</span><br><span class="line">NSLog(@&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">SubModel *subModel = [[SubModel alloc] init];</span><br><span class="line">[subModel sayHello];</span><br><span class="line">[subModel sayHi];</span><br><span class="line"></span><br><span class="line">exchangeMethod([SubModel class], @selector(sayHello), @selector(sayHi));</span><br><span class="line"></span><br><span class="line">[subModel sayHello];</span><br><span class="line">[subModel sayHi];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">[superModel sayHello];</span><br></pre></td></tr></table></figure>
+<p>打印结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Say Hello</span><br><span class="line">--------------</span><br><span class="line">Say Hello</span><br><span class="line">Say Hi</span><br><span class="line">Say Hi</span><br><span class="line">Say Hello</span><br><span class="line">--------------</span><br><span class="line">Say Hi</span><br></pre></td></tr></table></figure>
+<p>我们发现，随着对子类中方法的置换，不仅子类中的方法发生了变化，父类中的方法也随之发生了变化。这是为什么呢？</p>
+<p>造成上述现象，是由于在OC中，一个类所拥有的方法并不全部在自己内部保存，那些通过继承父类拥有的方法，是保存在父类的内部。如下图：</p>
+<p><img src="/blog/MethodSwizzle/Runtime_Class.png" alt="Objective-C类结构图"></p>
+<p>在此例中，对于SubModel的sayHello方法，该方法是保存在Superclass(class)中的，而sayHi方法是保存在Subclass(class)中。</p>
+<p>下面对该原理做一下简单验证，我们封装一下读取类中方法列表的方法，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void getInstanceMethod(Class cls) &#123;</span><br><span class="line">    NSLog(@&quot;---method---&quot;);</span><br><span class="line">    unsigned int methodCount = 0;</span><br><span class="line">    Method *methods = class_copyMethodList(cls, &amp;methodCount);</span><br><span class="line">    for (NSInteger i = 0; i &lt; methodCount; i++) &#123;</span><br><span class="line">        Method method = methods[i];</span><br><span class="line">        NSLog(@&quot;%@&quot;, [NSString stringWithCString:sel_getName(method_getName(method)) encoding:NSUTF8StringEncoding]);</span><br><span class="line">    &#125;</span><br><span class="line">    NSLog(@&quot;---end---&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并对SuperModel以及SubModel进行读取：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getInstanceMethod([SuperModel class]);</span><br><span class="line">getInstanceMethod([SubModel class]);</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---method---</span><br><span class="line">sayHello</span><br><span class="line">---end---</span><br><span class="line">---method---</span><br><span class="line">sayHi</span><br><span class="line">---end---</span><br></pre></td></tr></table></figure>
+<p>事实上，我们在对SubModel的方法进行交换时，实际上是将SuperModel的sayHello的SEL与SubModel的sayHi的IMP进行绑定，同时将SubMode的sayHi的SEL与SuperModel的sayHello的IMP进行绑定。</p>
+<p>这样做虽然达到了我们想要的效果，但是不可避免的破坏了SuperModel的内容，这在通常情况下是不希望出现的。</p>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><p>为了防止以上情况的出现，我们可以从runtime的其他API入手。</p>
+<p>在选择新的API之前，我们需要做以下几点的考虑：</p>
+<ol>
+<li>用来交换的方法可能是该类本身就存在的或者是从父类继承而来的。</li>
+<li>用来交换的方法可能在类的继承体系中不存在，该方法可能是一个全新的方法。</li>
+</ol>
+<p>我们可以找到以下两条API：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL class_addMethod(Class cls, SEL name, IMP imp, const char * types);</span><br></pre></td></tr></table></figure>
+<p>该API会判断当前类是否含有SEL，若含有，则返回NO；若不含有，则使用SEL与IMP添加该方法，并返回YES，同时，该方法可以为子类添加父类中的SEL，并和父类中的SEL使用同一个IMP。该API可以帮助我们解决上述第一个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char * types);</span><br></pre></td></tr></table></figure>
+<p>该API会有两种处理逻辑：</p>
+<ol>
+<li>若SEL在该类本身中不存在，那么方法会使用SEL，IMP来添加该方法，并返回一个空的IMP。</li>
+<li>若SEL在该类本身中存在，那么会使用IMP来替换掉SEL原先对应的IMP，并将SEL原先对应的IMP返回。</li>
+</ol>
+<p>将此逻辑对应为代码，结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void swizzleMethod(Class cls, SEL originalSelector, SEL newSelector) &#123;</span><br><span class="line">    Method originalMethod = class_getInstanceMethod(cls, originalSelector);</span><br><span class="line">    Method newMethod = class_getInstanceMethod(cls, newSelector);</span><br><span class="line">    </span><br><span class="line">    if (class_addMethod(cls,</span><br><span class="line">                        originalSelector,</span><br><span class="line">                        method_getImplementation(newMethod),</span><br><span class="line">                        method_getTypeEncoding(newMethod))) &#123;</span><br><span class="line">        //original在本类中不存在（包括本身不存在或方法为从父类继承），此时为originalSelector绑定newSelector的IMP</span><br><span class="line">        </span><br><span class="line">        //此时需要为本类添加newSelector，无论本类是否已经存在newSelector</span><br><span class="line">        class_replaceMethod(cls,</span><br><span class="line">                            newSelector,</span><br><span class="line">                            method_getImplementation(originalMethod),</span><br><span class="line">                            method_getTypeEncoding(originalMethod));</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        //originalSelector在本类中已经存在，直接对originalSelector的IMP进行交换，此时为保证不干扰newSelector，故而不使用method_exchangeImplementations</span><br><span class="line">        IMP imp = class_replaceMethod(cls,</span><br><span class="line">                                      originalSelector,</span><br><span class="line">                                      method_getImplementation(newMethod),</span><br><span class="line">                                      method_getTypeEncoding(newMethod));</span><br><span class="line">        //为本类添加newSelector，无论本类是否已经存在newSelector</span><br><span class="line">        class_replaceMethod(cls,</span><br><span class="line">                            newSelector,</span><br><span class="line">                            imp,</span><br><span class="line">                            method_getTypeEncoding(originalMethod));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们对该代码进行验证：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">SuperModel *superModel = [[SuperModel alloc] init];</span><br><span class="line">[superModel sayHello];</span><br><span class="line">NSLog(@&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">SubModel *subModel = [[SubModel alloc] init];</span><br><span class="line">[subModel sayHello];</span><br><span class="line">[subModel sayHi];</span><br><span class="line"></span><br><span class="line">swizzleMethod([SubModel class], @selector(sayHello), @selector(sayHi));</span><br><span class="line"></span><br><span class="line">[subModel sayHello];</span><br><span class="line">[subModel sayHi];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------------&quot;);</span><br><span class="line"></span><br><span class="line">[superModel sayHello];</span><br><span class="line"></span><br><span class="line">getInstanceMethod([SuperModel class]);</span><br><span class="line">getInstanceMethod([SubModel class]);</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Say Hello</span><br><span class="line">--------------</span><br><span class="line">Say Hello</span><br><span class="line">Say Hi</span><br><span class="line">Say Hi</span><br><span class="line">Say Hello</span><br><span class="line">--------------</span><br><span class="line">Say Hello</span><br><span class="line">---method---</span><br><span class="line">sayHello</span><br><span class="line">---end---</span><br><span class="line">---method---</span><br><span class="line">sayHello</span><br><span class="line">sayHi</span><br><span class="line">---end---</span><br></pre></td></tr></table></figure>
+<p>通过上述结果，我们发现，SuperModel中的sayHello依然保持了它的实现，而在SubModel中，则有了两个方法：sayHello和sayHi，同时这两个方法的实现进行了互换。</p>
+<p>至此，我们完成了我们理想中的Method Swizzle的实现。</p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.mademao.com/2018/09/14/深入浅出理解Method Swizzle/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/15/当iOS遇到malloc:free/" class="archive-article-date">
-  	<time datetime="2018-08-15T12:36:10.047Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-15</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/15/当iOS遇到malloc:free/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">当iOS遇到malloc/free</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/15/当iOS遇到malloc:free/">当iOS遇到malloc/free</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/09/GIF文件学习（一）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-09T11:15:42.818Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/09/GIF文件学习（一）：GIF文件结构学习/">GIF文件学习（一）：GIF文件结构学习</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/" class="archive-article-date">
-  	<time datetime="2018-08-09T11:15:42.818Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/09/GIF文件学习（二）：GIF文件结构学习/">GIF文件学习（二）：GIF文件结构学习</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -295,8 +398,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
